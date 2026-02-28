@@ -10,7 +10,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { type Tests, listTestsApi } from "../api/Tests.api";
 import { type Order, listOrdersAdminApi, createOrderApi, updateOrderApi, deleteOrderApi } from "../api/Orders.api";
 
-export default function AdminReservationsPage() {
+export default function AdminOrdersPage() {
   const [items, setItems] = useState<Order[]>([]);
   const [testsList, setTestsList] = useState<Tests[]>([]);
   
