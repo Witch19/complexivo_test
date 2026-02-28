@@ -1,0 +1,196 @@
+POSTGRESQL
+
+psql -U postgres
+CREATE DATABASE backend_db;  //Creacion de la base de datos
+CREATE USER backend_user WITH PASSWORD ‘123456’;  //Creacion de usuario
+CREATE DATABASE backend _db OWNER backend _user;
+
+\c vehiculos_db
+
+ALTER SCHEMA public OWNER TO backend_user;
+GRANT ALL ON SCHEMA public TO backend _user;
+GRANT CREATE ON SCHEMA public TO backend_user;
+
+ALTER DEFAULT PRIVILEGES FOR USER backend_user IN SCHEMA public
+GRANT ALL ON TABLES TO backend_user;
+
+ALTER DEFAULT PRIVILEGES FOR USER backend_user IN SCHEMA public
+GRANT ALL ON SEQUENCES TO backend_user;
+
+ALTER DEFAULT PRIVILEGES FOR USER backend_user IN SCHEMA public
+GRANT ALL ON FUNCTIONS TO backend_user;
+
+psql -U joss -d Proyecto_db -h localhost    //ver las base de datos
+\l
+ \c proyecto_db
+CREATE TABLE lab_tests ( 
+id BIGSERIAL PRIMARY KEY,
+movie_title VARCHAR(120) NOT NULL,
+room VARCHAR(20) NOT NULL,
+price NUMERIC(10, 2) NOT NULL,
+available_seats INTEGER NOT NULL);
+\dt
+CREATE TABLE lab_orders ( 
+id BIGSERIAL PRIMARY KEY,
+show_id BIGINT NOT NULL REFERENCES shows(id),
+customer_name VARCHAR(120) NOT NULL, 
+seats INTEGER NOT NULL,
+status VARCHAR(20) NOT NULL CHECK (status IN ('RESERVED', 'CONFIRMED
+"'CANCELLED )),
+ created_at TIMESTAMP NOT NULL DEFAULT NOWC));
+
+//dar permisos
+
+GRANT USAGE ON SCHEMA public TO cine_user;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO backend_user;
+
+GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA public TO backend_user;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO backend_user;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO backend_user;
+\dt
+\d movies
+\d reservations
+// Crear indices
+CREATE INDEX idx_reservations      
+ON reservations(show_id);
+\di
+//Creacion de vista
+CREATE VIEW vw_confirmadas AS         
+SELECT id, show_id, customer_name, seats, status, created_at
+FROM reservations
+WHERE status = ‘CONFIRMED’;
+\dv
+// funcion
+CREATE OR REPLACE FUNCTION fn_validar()
+RETURNS TRIGGER AS $$ 
+BEGIN
+IF NEW.seats <- 0 THEN
+RAISE EXCEPTION 'EL asiento deben ser mayores a 0'; 
+END IF;
+RETURN NEW;
+END;
+S$ LANGUAGE plpgsqL;
+//trigger
+CREATE TRIGGER trg_validar 
+BEFORE INSERT ON reservations
+ FOR EACH ROW 
+EXECUTE FUNCTION fn_validar();
+ 
+
+
+MONGODB
+Mongosh
+Show admin
+// Creacion de usuario
+ 
+//Creacion de collecciones
+Show collections
+ 
+ 
+ 
+ 
+//Creacion de índice
+db.movie_catalog.createIndex({ movie_title: 1 })
+//Consulta por identificador
+db.reservation_events.find({
+  reservation_id: NumberLong(1001)
+}).pretty()
+//consulta por rango de fechas
+Comandos
+db.reservation_events.find({
+  created_at: {
+    $gte: new Date("2026-01-01T00:00:00Z"),
+    $lte: new Date("2026-12-31T23:59:59Z")
+  }
+}).pretty()
+
+
+UBUNTU
+//Creacion de estructura
+Sudo mkdir cine 
+Sudo apt install tree
+Tree
+//navegación
+Dentro de cine -> pwd
+Ls ls-la
+//redireccion de salida
+Cd docs
+Sudo touch cine_comandos.txt evidencia.txt
+Sudo chmod 766 cine_comandos.txt
+Sudo date >> evidencia.txt
+Cat evidencia.txt
+Who > evidencia.txt
+Ls la >> evidencia.txt
+cat evidencia.txt
+
+// búsqueda con grep
+cat << EOF > cine_comandos.txt
+GET /api/movies/
+GET /api/reservations/
+POST /api/reservations/
+DELETE /api/reservations/20/
+INFO: reservation created successfully
+INFO: reservations service running
+WARN: reservations timeout detected
+EOF
+Cat cine_comandos.txt
+Grep reservations cine_comandos.txt
+Grep -n reservations cine_comandos.txt
+
+// permisos y sticky bit
+Sudo cp evidencia.txt evidencia_backup.txt
+Ls -la
+Sudo mv evidencia_backup.txt ../frontend/
+Sudo mkdir shared_cine
+Sudo chmod 1777 shared_cine/
+Ls -ld shared_cine/
+
+
+
+
+DEBUG=1
+SECRET_KEY=dev-secret-key
+DB_NAME=backend_db
+DB_USER=backend_user
+DB_PASSWORD=admin123
+DB_HOST=127.0.0.1
+DB_PORT=5432
+
+# Mongo sin Docker: servicio local
+MONGO_URI=mongodb://127.0.0.1:27017
+MONGO_DB=backend_db
+
+CORS_ORIGIN=http://localhost:5173
+usuario
+admin
+contraseña
+admin
+
+
+
+/* --- Creación de Función --- */
+CREATE OR REPLACE FUNCTION fn_validar_quantity()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.quantity IS NULL OR NEW.quantity <= 0 THEN
+        RAISE EXCEPTION 'No se permite insertar valores negativos';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+/* --- Creación de Trigger --- */
+CREATE OR REPLACE TRIGGER trg_validar_quantity
+BEFORE INSERT ON restaurante_mesa
+FOR EACH ROW
+EXECUTE FUNCTION fn_validar_quantity();
+
+ollama run llama3.1
+ollama run codellama 
+ollama run deepseek-coder
