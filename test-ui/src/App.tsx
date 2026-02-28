@@ -3,12 +3,12 @@ import { AppBar, Toolbar, Typography, Button, Stack } from "@mui/material";
 
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
-import PublicPedidosPage from "./pages/PublicReservationsPage";
+import PublicTestsPage from "./pages/PublicTestsPage";
 import LoginPage from "./pages/LoginPage";
 
 import AdminHomePage from "./pages/AdminHomePage";
-import AdminMesasPage from "./pages/AdminShowsPage";
-import AdminPedidosPage from "./pages/AdminReservationsPage";
+import AdminTestsPage from "./pages/AdminTestsPage";
+import AdminOrdersPage from "./pages/AdminOrdersPage";
 
 import RequireAuth from "./components/RequireAuth";
 
@@ -34,7 +34,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/acerca" element={<AboutPage />} />
-        <Route path="/lista" element={<PublicPedidosPage />} />
+        <Route path="/lista" element={<PublicTestsPage />} />
         <Route path="/login" element={<LoginPage />} />
 
         <Route
@@ -47,19 +47,19 @@ export default function App() {
         />
 
         <Route
-          path="/admin/Mesas"
+          path="/admin/Tests"
           element={
             <RequireAuth>
-              <AdminMesasPage />
+              <AdminTestsPage />
             </RequireAuth>
           }
         />
 
         <Route
-          path="/admin/Pedidos"
+          path="/admin/Orders"
           element={
             <RequireAuth>
-              <AdminPedidosPage />
+              <AdminOrdersPage />
             </RequireAuth>
           }
         />
